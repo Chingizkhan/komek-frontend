@@ -1,0 +1,9 @@
+.Layout {
+    display: flex;
+
+}
+
+.Layout_Content {
+    padding: var(--content-padding);
+    width: 100%;
+}

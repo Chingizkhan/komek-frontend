@@ -1,0 +1,24 @@
+.NavBar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+    border: 1px solid white;
+}
+
+.NavBar_item {
+    border: 1px solid white;
+    width: 100%;
+    display: flex;
+}
+
+.NavBar_item a {
+    padding: 15px 20px;
+    width: 100%;
+}
+
+.NavBar_item.selected {
+    background-color: rgba(255, 255, 255, 0.3);
+}
