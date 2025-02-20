@@ -4,7 +4,7 @@ import {ChangeEvent, useState} from "react";
 import {formatPhoneInput} from "@/app/utils/phone";
 import Logo from "@/app/ui/logo/logo";
 
-const Form = ({ title, btnText, addition, action }: {title: string, btnText: string}) => {
+const Form = ({ title, btnText, addition, action, error }: {title: string, btnText: string, error: string}) => {
     const [phone, setPhone] = useState('+7')
 
     const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ const Form = ({ title, btnText, addition, action }: {title: string, btnText: str
                     <Logo />
                 </div>
                 <h2 className="text-lg font-semibold mb-4">{title}</h2>
-                <form action={action}>
+                <form onSubmit={action}>
                     <div className="mb-4">
                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Номер телефона</label>
                         <input
@@ -44,6 +44,7 @@ const Form = ({ title, btnText, addition, action }: {title: string, btnText: str
                         />
                     </div>
                     {addition}
+                    <p className="mb-4 text-red-500">{error ?? error}</p>
                     <button
                         type="submit"
                         className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
