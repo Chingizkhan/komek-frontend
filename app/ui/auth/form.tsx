@@ -3,8 +3,9 @@
 import {ChangeEvent, useState} from "react";
 import {formatPhoneInput} from "@/app/utils/phone";
 import Logo from "@/app/ui/logo/logo";
+import Loader from "@/app/ui/loader/loader";
 
-const Form = ({ title, btnText, addition, action, error }: {title: string, btnText: string, error: string}) => {
+const Form = ({ title, btnText, addition, action, error, loading }: {title: string, btnText: string, error: string, loading: boolean}) => {
     const [phone, setPhone] = useState('+7')
 
     const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +46,9 @@ const Form = ({ title, btnText, addition, action, error }: {title: string, btnTe
                     </div>
                     {addition}
                     <p className="mb-4 text-red-500">{error ?? error}</p>
+                    <div className="mb-4">
+                        {loading ? <Loader /> : null}
+                    </div>
                     <button
                         type="submit"
                         className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"

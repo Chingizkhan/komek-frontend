@@ -29,6 +29,7 @@ export default function LoginForm() {
     return (
         <div>
             <Form
+                loading={isPending}
                 error={error}
                 title="Вход"
                 btnText="Войти"

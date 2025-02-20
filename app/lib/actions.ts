@@ -2,8 +2,6 @@
 
 import { z } from 'zod';
 import {normalizePhoneNumber} from "@/app/utils/phone";
-import {redirect} from "next/navigation";
-import {LINK_LOGIN} from "@/app/consts/links";
 import {cookies} from "next/headers";
 
 const registerSchema = z.object({
@@ -35,17 +33,17 @@ export async function registerHandler(formData: FormData) {
         const data = await response.json()
 
         if (!response.ok) {
-            return new Error("ERRR")
+            return { error: new Error(data.error) }
         }
 
-        console.log(data)
+        return {
+            data,
+            success: true
+        }
 
     } catch (e) {
-        console.log('err:', e)
-        return
+        return { error: e }
     }
-
-    redirect(LINK_LOGIN)
 }
 
 const loginSchema = z.object({
