@@ -6,11 +6,11 @@ import styles from "./auth.module.css"
 export default function Layout({ children } : {children: ReactNode}) {
     return (
         <>
-            <Header />
+            {/*<Header />*/}
             <div className={styles.Container}>
                 {children}
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </>
     )
 }
