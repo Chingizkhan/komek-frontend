@@ -1,108 +1,113 @@
+'use client'
 import Image from "next/image";
 import {removeHandler} from "@/app/lib/actions";
+import {useState} from "react";
+import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
+import {useAuthStore} from "@/app/store/auth";
+
+// <button
+//     onClick={removeHandler}
+//     className="bg-red-500 p-4 text-white"
+// >
+//   Delete account
+// </button>
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <button
-          onClick={removeHandler}
-          className="bg-red-500 p-4 text-white"
-        >
-          Delete account
-        </button>
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [menuOpen, setMenuOpen] = useState(false);
+    const toggleMenu = () => setMenuOpen(!menuOpen);
+    const { user } = useAuthStore()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    return (
+        <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+            {/* Шапка */}
+            <header className="bg-white shadow-md p-4 fixed w-full top-0 z-20">
+                <div className="max-w-6xl mx-auto flex justify-between items-center">
+                    <h1 className="text-2xl font-bold text-blue-600">Помощь рядом</h1>
+
+                    {/* Десктопное меню */}
+                    <nav className="hidden md:flex space-x-6">
+                        <a href="#" className="hover:text-blue-600 transition">Главная</a>
+                        <a href="#news" className="hover:text-blue-600 transition">Новости</a>
+                        <a href="#people" className="hover:text-blue-600 transition">Люди</a>
+                    </nav>
+
+                    {/* Гамбургер меню */}
+                    <button onClick={toggleMenu} className="md:hidden text-gray-700">
+                        <Menu size={28} />
+                    </button>
+                </div>
+            </header>
+
+            {/* Мобильное меню */}
+            {menuOpen && <div className="fixed inset-0 bg-black/40 z-30" onClick={toggleMenu}></div>}
+            <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: menuOpen ? 0 : "100%", transition: { duration: 0.3 } }}
+                className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 flex flex-col p-6"
+            >
+                <button onClick={toggleMenu} className="self-end text-gray-700">
+                    <X size={28} />
+                </button>
+                <p>{user?.name}</p>
+                <nav className="mt-8 flex flex-col space-y-4">
+                    <a href="#" className="text-lg font-medium hover:text-blue-600 transition">Главная</a>
+                    <a href="#news" className="text-lg font-medium hover:text-blue-600 transition">Новости</a>
+                    <a href="#people" className="text-lg font-medium hover:text-blue-600 transition">Люди</a>
+                </nav>
+            </motion.div>
+
+            {/* Контент */}
+            <main className="flex-1 pt-20 max-w-6xl mx-auto p-6">
+                {/* Новости */}
+                <section id="news" className="mb-12">
+                    <h2 className="text-3xl font-semibold text-blue-700 mb-6">Новости</h2>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        <div className="bg-white shadow-md rounded-lg p-4">
+                            <h3 className="text-xl font-semibold">Новая программа помощи</h3>
+                            <p className="text-gray-600 mt-2">Мы запустили новую программу поддержки семей в трудных ситуациях.</p>
+                        </div>
+                        <div className="bg-white shadow-md rounded-lg p-4">
+                            <h3 className="text-xl font-semibold">Благотворительная акция</h3>
+                            <p className="text-gray-600 mt-2">Присоединяйтесь к нашей акции и помогите детям получить образование.</p>
+                        </div>
+                        <div className="bg-white shadow-md rounded-lg p-4">
+                            <h3 className="text-xl font-semibold">Сбор средств</h3>
+                            <p className="text-gray-600 mt-2">Открыт сбор средств на лечение детей с редкими заболеваниями.</p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Люди для помощи */}
+                <section id="people" className="mb-12">
+                    <h2 className="text-3xl font-semibold text-blue-700 mb-6">Люди, которым нужна помощь</h2>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
+                            <img src="/person1.jpg" alt="Человек 1" className="w-24 h-24 rounded-full mb-4" />
+                            <h3 className="text-xl font-semibold">Анна, 5 лет</h3>
+                            <p className="text-gray-600 mt-2 text-center">Нужна помощь для оплаты лечения.</p>
+                            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Помочь</button>
+                        </div>
+                        <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
+                            <img src="/person2.jpg" alt="Человек 2" className="w-24 h-24 rounded-full mb-4" />
+                            <h3 className="text-xl font-semibold">Иван, 10 лет</h3>
+                            <p className="text-gray-600 mt-2 text-center">Сбор на операцию по восстановлению зрения.</p>
+                            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Помочь</button>
+                        </div>
+                        <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
+                            <img src="/person3.jpg" alt="Человек 3" className="w-24 h-24 rounded-full mb-4" />
+                            <h3 className="text-xl font-semibold">Олег, 7 лет</h3>
+                            <p className="text-gray-600 mt-2 text-center">Необходимо реабилитационное оборудование.</p>
+                            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Помочь</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            {/* Футер */}
+            <footer className="bg-blue-900 text-white p-6 text-center mt-12 rounded-t-xl">
+                <p>© 2025 Помощь рядом. Все права защищены.</p>
+            </footer>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }

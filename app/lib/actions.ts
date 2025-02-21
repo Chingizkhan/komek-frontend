@@ -54,12 +54,14 @@ const loginSchema = z.object({
 // const Register = registerSchema.omit({ phone: true, password: true });
 const LoginHandler = loginSchema.omit({  });
 
-async function fetchAuth(url, method, body, headers) {
+async function fetchAuth({
+    url, method, notUseCache, body, headers
+}) {
     const cookie = await cookies()
     const accessToken = cookie.get("Access-Token")
     const refreshToken = cookie.get("Refresh-Token")
 
-    const response = await fetch(url, {
+    let req = {
         method: method,
         headers: {
             ...headers,
@@ -68,8 +70,14 @@ async function fetchAuth(url, method, body, headers) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: body
-    })
+        body: body,
+    }
+
+    if (notUseCache) {
+        req.cache = 'no-store'
+    }
+
+    const response = await fetch(url, req)
     const data = await response.json()
 
     return {
@@ -79,9 +87,10 @@ async function fetchAuth(url, method, body, headers) {
 }
 
 export async function removeHandler() {
-    const { data, ok } = await fetchAuth('http://localhost:8887/user/delete', 'DELETE', JSON.stringify({
-
-    }))
+    const { data, ok } = await fetchAuth({
+        url: 'http://localhost:8887/user/delete',
+        method: 'DELETE'
+    })
     console.log('data:', data)
     console.log('ok:', ok)
 }
@@ -110,14 +119,16 @@ export async function loginHandler(formData: FormData) {
             return { error: new Error(data.error) }
         }
 
-        cookies().set("Access-Token", data.access_token, {
+        const cookie = await cookies()
+
+        cookie.set("Access-Token", data.access_token, {
             httpOnly: true,
-            sameSite: 'Strict',
+            sameSite: 'strict',
             maxAge: 60*60
         })
-        cookies().set("Refresh-Token", data.refresh_token, {
+        cookie.set("Refresh-Token", data.refresh_token, {
             httpOnly: true,
-            sameSite: 'Strict',
+            sameSite: 'strict',
             maxAge: 60*60*24
         })
         console.log(data)
@@ -130,4 +141,20 @@ export async function loginHandler(formData: FormData) {
     }
 
     // redirect('/')
+}
+
+export async function getUser() {
+    try {
+        const { data, ok } = await fetchAuth({
+            url: 'http://localhost:8887/user',
+            method: 'GET',
+            notUseCache: true
+        })
+        if (!ok) {
+            return { error: new Error(data.error) }
+        }
+        return { data }
+    } catch (e) {
+        return { error: e }
+    }
 }
