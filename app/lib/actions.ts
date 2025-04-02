@@ -18,7 +18,6 @@ export async function registerHandler(formData: FormData) {
             phone: formData.get('phone'),
             password: formData.get('password')
         })
-        await new Promise((resolve) => setTimeout(resolve, 1500))
         const response = await fetch('http://localhost:8887/user/register', {
             method: 'POST',
             headers: {
@@ -54,14 +53,55 @@ const loginSchema = z.object({
 // const Register = registerSchema.omit({ phone: true, password: true });
 const LoginHandler = loginSchema.omit({  });
 
-async function fetchAuth({
-    url, method, notUseCache, body, headers
+async function fetchAuth(props: {
+    url: string,
+    method: string,
+    notUseCache: boolean,
+    body: any,
+    headers: any,
+}) {
+    let { response , error} = await makeAuthRequest(props)
+    if (error) {
+        return { error: error }
+    }
+    if (response.status === 401) {
+        await refreshTokens()
+        response = await makeAuthRequest(props)
+    }
+    const data = await response.json()
+
+    if (!response.ok) {
+        return { error: new Error(data.error), ok: false }
+    }
+
+    return {
+        data,
+        ok: response.ok
+    }
+}
+
+async function makeAuthRequest({ url, method, notUseCache, body, headers }:{
+    url: string,
+    method: string,
+    notUseCache: boolean,
+    body: any,
+    headers: any,
 }) {
     const cookie = await cookies()
     const accessToken = cookie.get("Access-Token")
     const refreshToken = cookie.get("Refresh-Token")
 
-    let req = {
+    console.log('accessToken:', accessToken)
+    console.log('refreshToken:', refreshToken)
+
+    if (!accessToken?.value) {
+        return { error: 'access_token_is_empty' }
+    }
+
+    console.log('accessToken:', accessToken)
+    console.log('refreshToken:', refreshToken)
+
+    const req = {
         method: method,
         headers: {
             ...headers,
@@ -78,11 +118,63 @@ async function fetchAuth({
     }
 
     const response = await fetch(url, req)
-    const data = await response.json()
+    return { response }
+}
 
-    return {
-        data,
-        ok: response.ok
+async function refreshTokens() {
+    const cookie = await cookies()
+    const refreshToken = cookie.get("Refresh-Token")
+
+    const response = await fetch('http://localhost:8887/user/refresh-token', {
+        method: 'POST',
+        body: JSON.stringify({refresh_token: refreshToken?.value})
+    })
+
+    const tokens = await response.json()
+
+    setTokens(cookie, tokens)
+
+    console.log('tokens:', tokens)
+}
+
+export async function listClients() {
+    try {
+        const response = await fetch('http://localhost:8887/client/list',{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'GET'
+        })
+        const data = await response.json()
+        if (!response.ok) {
+            return { error: new Error(data.error) }
+        }
+
+        return { data, success: true }
+    } catch (e) {
+        return { error: e }
+    }
+}
+
+export async function getClient(clientID: string) {
+    try {
+        const response = await fetch(`http://localhost:8887/client/${clientID}`,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'GET'
+        })
+        const data = await response.json()
+        console.log('data:', data)
+        if (!response.ok) {
+            return { error: new Error(data.error) }
+        }
+
+        return { data, success: true }
+    } catch (e) {
+        return { error: e }
     }
 }
 
@@ -121,17 +213,7 @@ export async function loginHandler(formData: FormData) {
 
         const cookie = await cookies()
 
-        cookie.set("Access-Token", data.access_token, {
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: 60*60
-        })
-        cookie.set("Refresh-Token", data.refresh_token, {
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: 60*60*24
-        })
-        console.log(data)
+        setTokens(cookie, data)
 
         return { data, success: true }
 
@@ -143,15 +225,28 @@ export async function loginHandler(formData: FormData) {
     // redirect('/')
 }
 
+function setTokens(cookie, data: {access_token: string, refresh_token: string}) {
+    cookie.set("Access-Token", data.access_token, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 60*60
+    })
+    cookie.set("Refresh-Token", data.refresh_token, {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 60*60*24
+    })
+}
+
 export async function getUser() {
     try {
-        const { data, ok } = await fetchAuth({
+        const { data, ok, error } = await fetchAuth({
             url: 'http://localhost:8887/user',
             method: 'GET',
             notUseCache: true
         })
         if (!ok) {
-            return { error: new Error(data.error) }
+            return error
         }
         return { data }
     } catch (e) {

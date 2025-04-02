@@ -94,7 +94,7 @@ export default function PaymentModal({ isOpen, onClose }) {
                     <Dialog.Panel
                         // ref={modalPanelRef}
                         id="modal-panel"
-                        className="w-full bg-white rounded-t-2xl shadow-2xl h-[80vh] max-h-[90vh] overflow-y-auto relative z-[101]"
+                        className="w-full bg-white rounded-t-2xl shadow-2xl h-[90vh] max-h-[90vh] overflow-y-auto relative z-[101]"
                     >
                         {/* Индикатор для смахивания */}
                         <div
@@ -144,7 +144,7 @@ export default function PaymentModal({ isOpen, onClose }) {
                                                 }`}
                                                 onClick={() => setAmount(val)}
                                             >
-                                                {val} ₽
+                                                {val} ₸
                                             </button>
                                         ))}
                                     </div>
@@ -152,11 +152,11 @@ export default function PaymentModal({ isOpen, onClose }) {
                                     <div className="mt-4 bg-gray-100 p-3 rounded-lg">
                                         <p className="flex justify-between">
                                             <span>🛒 Продуктовая корзина</span>
-                                            <span>{amount} ₽/мес</span>
+                                            <span>{amount} ₸/мес</span>
                                         </p>
                                         <p className="flex justify-between mt-2">
                                             <span>🌀 Сопровождение (12%)</span>
-                                            <span>{Math.round(amount * 0.12)} ₽/мес</span>
+                                            <span>{Math.round(amount * 0.12)} ₸/мес</span>
                                         </p>
                                     </div>
 
@@ -248,8 +248,8 @@ export default function PaymentModal({ isOpen, onClose }) {
                                 onClick={onClose}
                             >
                                 {activeTab === "subscription"
-                                    ? `Подписаться на ${compensate ? amount + Math.round(amount * 0.12) : amount} ₽/мес`
-                                    : `Оплатить ${amount} ₽ разово`}
+                                    ? `Подписаться на ${compensate ? amount + Math.round(amount * 0.12) : amount} ₸/мес`
+                                    : `Оплатить ${amount} ₸ разово`}
                             </button>
                         </div>
                     </Dialog.Panel>

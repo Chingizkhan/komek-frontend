@@ -2,12 +2,36 @@ import { ROLE_USER, ROLE_ADMIN, ROLE_MERCHANT } from "@/app/consts/links";
 
 export type Role = typeof ROLE_USER | typeof ROLE_ADMIN | typeof ROLE_MERCHANT;
 
+export type Person = {
+    id: string;
+    name: string;
+    phone: string;
+    email: string;
+    age: number;
+    city: string;
+    goal: number;
+    collected: number;
+    address: string;
+    helpers: string[];
+    description: string;
+    circumstances: string;
+    image: string;
+    categories: string[];
+}
+
 export type Client = {
     id: string;
     name: string;
     phone: string;
     email: string;
     image_url: string;
+}
+
+export type Account = {
+    id: string
+    balance: number
+    country: string
+    currency: string
 }
 
 export type User = {
@@ -17,7 +41,9 @@ export type User = {
     phone: string;
     login: string;
     image_url: string;
+    email_verified: boolean
     roles: Role[];
+    account: Account
 }
 
 export type Merchant = {

@@ -1,7 +1,13 @@
+'use client'
+
 import Image from "next/image";
 import Link from "next/link";
 import {LINK_LOGIN} from "@/app/consts/links";
 import RewardProgress from "@/app/components/reward_progress";
+import {useUser} from "@/app/store/auth";
+import {formatPhoneInput, normalizePhoneNumber} from "@/app/utils/phone";
+import AccountBalance from "@/app/ui/account_balance/account_balance";
+import Separator from "@/app/ui/separator/separator";
 
 const rewards = [
     {
@@ -18,26 +24,53 @@ const rewards = [
     },
 ];
 
+function Login() {
+    return (
+        <>
+            <div className="flex items-center gap-3">
+                <div
+                    className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-lg">
+                    🙂
+                </div>
+                <div>
+                    <p className="font-semibold">Гость</p>
+                    <p className="text-gray-500 text-sm">Авторизуйся</p>
+                </div>
+            </div>
+            <Link href={LINK_LOGIN} className="bg-black text-white px-4 py-2 rounded-lg">
+                Войти
+            </Link>
+        </>
+    )
+}
+
 export default function RewardsPage() {
+    const user = useUser()
+    console.log('user:', user)
+
     return (
         <div className="min-h-screen bg-white text-black pb-16">
             {/* Верхний блок */}
             <div className="p-4">
                 <p className="text-lg font-bold">Награды</p>
-                <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-lg">
-                            🙂
+
+                {
+                    user?.id ? (
+                        <div className="flex flex-col items-center justify-between mt-3">
+                            <div className="flex gap-8">
+                                <p className="text-xl ">{user.name}</p>
+                                <p className="text-lg ">{formatPhoneInput(user.phone)}</p>
+                            </div>
+                            <Separator fraction={1} />
+                            <AccountBalance account={user.account}/>
                         </div>
-                        <div>
-                            <p className="font-semibold">Гость</p>
-                            <p className="text-gray-500 text-sm">Авторизуйся</p>
+                    ) : (
+                        <div className="flex items-center justify-between mt-3">
+                            <Login/>
+                            {/*<Points />*/}
                         </div>
-                    </div>
-                    <Link href={LINK_LOGIN} className="bg-black text-white px-4 py-2 rounded-lg">
-                        Войти
-                    </Link>
-                </div>
+                    )
+                }
             </div>
 
             {/* Топ 10 наград */}

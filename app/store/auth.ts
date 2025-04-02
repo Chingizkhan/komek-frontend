@@ -1,7 +1,6 @@
 // app/store/auth.ts
 import { create } from "zustand";
 import {User} from "@/app/domain/domain";
-import {getUser} from "@/app/lib/actions";
 
 // Интерфейс для типов состояния
 interface AuthState {
@@ -16,3 +15,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     login: (user: User) => set({ user: user }),
     logout: () => set({ user: null }),
 }))
+
+export const useUser = () => {
+    return useAuthStore((state) => state.user)
+}

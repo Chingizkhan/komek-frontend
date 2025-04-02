@@ -19,15 +19,12 @@ export default function RegistrationForm() {
             const result = await registerHandler(new FormData(e.target as HTMLFormElement));
 
             if (result.success) {
-                router.push("/");
+                router.push(LINK_LOGIN);
             } else {
-                console.log("result.error:", result.error)
                 setError(result.error.message || "Ошибка регистрации");
             }
         });
     };
-
-    console.log('isPending:', isPending)
 
     return (
         <Form
