@@ -1,8 +1,8 @@
 import styles from "./client.module.css"
 import {Person} from "@/app/domain/domain";
 import Link from "next/link";
-import DonationCard from "@/app/ui/client/item";
-import {listClients} from "@/app/lib/actions";
+import DonationCard from "@/app/ui/fundraise/item";
+import {listFundraise} from "@/app/lib/actions";
 
 export const people: Person[] = [
     {
@@ -45,26 +45,17 @@ export const people: Person[] = [
 //     return new Promise(resolve => resolve(people))
 // }
 
-export default async function ClientList() {
-    const { data } = await listClients();
-
-    const clients = data.map(client => {
-        return {
-            ...client,
-            collected: 2500,
-            goal: 3000,
-            categories: client.categories.map(category => category.name)
-        }
-    })
+export default async function FundraiseList() {
+    const { data: fundraises } = await listFundraise()
 
     return (
         <div className="bg-gray-100 min-h-screen p-4">
 
             <ul className={styles.Client_list}>
-                {clients.map((client: Person) => (
-                    <li key={client.id}>
-                        <Link href={"/client/" + client.id}>
-                            <DonationCard client={client}/>
+                {fundraises.map((fund: Person) => (
+                    <li key={fund.id}>
+                        <Link href={"/fundraise/" + fund.id}>
+                            <DonationCard client={fund}/>
                         </Link>
                     </li>
                 ))}

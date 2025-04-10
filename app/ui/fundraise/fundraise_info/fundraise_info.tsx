@@ -33,12 +33,12 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import PaymentModal from "@/app/components/payment_modal";
 import {Person} from "@/app/domain/domain";
-import {people} from "@/app/ui/client/list";
+import {people} from "@/app/ui/fundraise/list";
 import {ProgressFunds} from "@/app/ui/progress/progress_funds";
 import ButtonAction from "@/app/ui/button/action";
 import {Categories} from "@/app/ui/category/category";
 import Separator from "@/app/ui/separator/separator";
-import {getClient} from "@/app/lib/actions";
+import {getFundraise} from "@/app/lib/actions";
 
 async function fetchClientInfo(id: string) : Promise<Person | undefined>  {
     return new Promise(resolve => {
@@ -48,26 +48,23 @@ async function fetchClientInfo(id: string) : Promise<Person | undefined>  {
     });
 }
 
-export default function ClientInfo() {
+export default function FundraiseInfo() {
     const { id } = useParams();
-    const [person, setPerson] = useState<Person | null>(null);
+    const [fundraise, setFundraise] = useState<Person | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         async function fetchPerson() {
-            const { data } = await getClient(id);
+            const { data } = await getFundraise(id);
             const client = {
                 ...data,
-                collected: 2500,
-                goal: 3000,
-                categories: data.categories.map(category => category.name)
             }
-            setPerson(client);
+            setFundraise(client);
         }
         fetchPerson();
     }, [id]);
 
-    if (!person) return <p className="text-center mt-10 text-gray-500">Загрузка...</p>;
+    if (!fundraise) return <p className="text-center mt-10 text-gray-500">Загрузка...</p>;
 
     return (
         <div className="max-w-md mx-auto md:max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden">
@@ -84,8 +81,8 @@ export default function ClientInfo() {
             {/*</div>*/}
             <div className="relative">
                 <Image
-                    src={person.image_url}
-                    alt={person.name}
+                    src={fundraise.image_url}
+                    alt={fundraise.name}
                     width={600}
                     height={400}
                     // layout="fill"
@@ -97,21 +94,21 @@ export default function ClientInfo() {
 
             {/* Информация */}
             <div className="p-6 relative -mt-6 bg-white rounded-t-3xl shadow-md">
-                <h1 className="text-2xl font-bold text-gray-900 text-center">{person.name}</h1>
+                <h1 className="text-2xl font-bold text-gray-900 text-center">{fundraise.name}</h1>
 
-                <Categories categories={[...person.categories, person.city]}/>
+                <Categories categories={[...fundraise.categories, fundraise.city]}/>
 
                 <div className="flex items-center justify-center text-gray-600 text-sm mb-4">
-                    📍 {person.city}
+                    📍 {fundraise.city}
                 </div>
 
                 {/* Прогресс сбора */}
-                <ProgressFunds from={person.fundraises[0].collected} to={person.fundraises[0].goal} title="Продуктовая корзина"/>
+                <ProgressFunds from={fundraise.collected} to={fundraise.goal} title="Продуктовая корзина"/>
 
                 {/* Количество людей, которые помогают */}
-                <Supporters quantity={3}/>
+                <Supporters quantity={fundraise.supporters_quantity}/>
                 <Separator fraction={0.5} />
-                <Description desc={person.description} />
+                <Description desc={fundraise.description} />
 
                 {/* Кнопка "Помочь" */}
                 <div className="mt-6">
@@ -129,7 +126,7 @@ function Supporters({quantity}: { quantity: number }) {
     return (
         <div className="bg-gray-100 p-3 rounded-lg mt-4 text-gray-700">
             <p className="text-sm">Уже помогают</p>
-            <p className="text-lg font-bold">{quantity} человека</p>
+            <p className="text-lg font-bold">{quantity} человек</p>
         </div>
     )
 }

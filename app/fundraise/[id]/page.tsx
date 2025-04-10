@@ -1,4 +1,4 @@
-import ClientInfo from "@/app/ui/client/client_info/client_info";
+import FundraiseInfo from "@/app/ui/fundraise/fundraise_info/fundraise_info";
 import {Suspense} from "react";
 import Loader from "@/app/ui/loader/loader";
 
@@ -8,7 +8,7 @@ export default async function Page({ params }) {
     return (
         <>
             <Suspense fallback={<Loader />}>
-                <ClientInfo id={id} />
+                <FundraiseInfo id={id} />
             </Suspense>
         </>
     )

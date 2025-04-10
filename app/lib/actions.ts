@@ -137,9 +137,9 @@ async function refreshTokens() {
     console.log('tokens:', tokens)
 }
 
-export async function listClients() {
+export async function listFundraise() {
     try {
-        const response = await fetch('http://localhost:8887/client/list',{
+        const response = await fetch('http://localhost:8887/fundraise/',{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -157,9 +157,9 @@ export async function listClients() {
     }
 }
 
-export async function getClient(clientID: string) {
+export async function getFundraise(clientID: string) {
     try {
-        const response = await fetch(`http://localhost:8887/client/${clientID}`,{
+        const response = await fetch(`http://localhost:8887/fundraise/${clientID}`,{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
