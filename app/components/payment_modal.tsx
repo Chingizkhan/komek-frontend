@@ -1,14 +1,33 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect, useRef } from "react";
+import {useUser} from "@/app/store/auth";
+import {donate} from "@/app/lib/actions/fundraise/donate";
 
-export default function PaymentModal({ isOpen, onClose }) {
+export default function PaymentModal({ isOpen, onClose, accountID, fundraiseID, onDonateSuccess }: {
+    isOpen: boolean,
+    onClose: () => void,
+    accountID: string,
+    fundraiseID: string,
+    onDonateSuccess: () => Promise<void>,
+}) {
     const [amount, setAmount] = useState(1000);
     const [compensate, setCompensate] = useState(true);
     const [activeTab, setActiveTab] = useState<"subscription" | "one-time">("subscription");
 
+    const user = useUser()
+
+    const paymentHandler = async () => {
+        const {ok} = await donate(accountID, amount, fundraiseID)
+        if (ok) {
+            await onDonateSuccess()
+            onClose()
+        }
+    }
+
     const [cards, setCards] = useState([
         { id: 1, type: "Mastercard", number: "*4539", selected: false },
-        { id: 2, type: "МИР", number: "*8542", selected: true },
+        { id: 2, type: "МИР", number: "*8542", selected: false },
+        { id: 3, type: 'С баланса', number: '', selected: true }
     ]);
 
     const [isAddingCard, setIsAddingCard] = useState(false);
@@ -245,7 +264,7 @@ export default function PaymentModal({ isOpen, onClose }) {
                         <div className="pl-6 pr-6 pb-10">
                             <button
                                 className="mt-4 w-full bg-purple-600 text-white py-3 rounded-lg text-lg"
-                                onClick={onClose}
+                                onClick={paymentHandler}
                             >
                                 {activeTab === "subscription"
                                     ? `Подписаться на ${compensate ? amount + Math.round(amount * 0.12) : amount} ₸/мес`

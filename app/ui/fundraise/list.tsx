@@ -2,7 +2,7 @@ import styles from "./client.module.css"
 import {Person} from "@/app/domain/domain";
 import Link from "next/link";
 import DonationCard from "@/app/ui/fundraise/item";
-import {listFundraise} from "@/app/lib/actions";
+import {listFundraise} from "@/app/lib/actions/fundraise/list";
 
 export const people: Person[] = [
     {

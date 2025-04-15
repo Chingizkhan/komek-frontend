@@ -1,10 +1,10 @@
 'use client'
-import {loginHandler} from "@/app/lib/actions";
 import {LINK_REGISTRATION} from "@/app/consts/links";
 import Form from "@/app/ui/auth/form";
 import Link from "next/link";
 import React, {useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
+import {loginHandler} from "@/app/lib/actions/auth/login";
 
 
 export default function LoginForm() {

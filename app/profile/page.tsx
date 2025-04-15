@@ -46,7 +46,6 @@ function Login() {
 
 export default function RewardsPage() {
     const user = useUser()
-    console.log('user:', user)
 
     return (
         <div className="min-h-screen bg-white text-black pb-16">

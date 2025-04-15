@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {useAuthStore} from "@/app/store/auth";
-import {getUser} from "@/app/lib/actions";
+import {getUser} from "@/app/lib/actions/user/get";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const setUser = useAuthStore((state) => state.login);

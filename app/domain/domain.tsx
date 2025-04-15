@@ -19,6 +19,19 @@ export type Person = {
     categories: string[];
 }
 
+export type Fundraise = {
+    id: string;
+    name: string;
+    image_url: string;
+    city: string;
+    categories: string[]
+    goal: number;
+    collected: number;
+    description: string;
+    supporters_quantity: number;
+    account_id: string;
+}
+
 export type Client = {
     id: string;
     name: string;

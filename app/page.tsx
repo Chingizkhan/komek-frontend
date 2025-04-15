@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import {removeHandler} from "@/app/lib/actions";
+import {removeHandler} from "@/app/lib/actions/actions";
 import {useState} from "react";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";

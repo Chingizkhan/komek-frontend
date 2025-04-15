@@ -1,7 +1,7 @@
 'use client'
 
 import {useRouter} from "next/navigation";
-import {loginHandler, registerHandler} from "@/app/lib/actions";
+import {loginHandler, registerHandler} from "@/app/lib/actions/actions";
 import {LINK_LOGIN} from "@/app/consts/links";
 import Form from "@/app/ui/auth/form";
 import Link from "next/link";

@@ -32,25 +32,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import PaymentModal from "@/app/components/payment_modal";
-import {Person} from "@/app/domain/domain";
-import {people} from "@/app/ui/fundraise/list";
+import {Fundraise} from "@/app/domain/domain";
 import {ProgressFunds} from "@/app/ui/progress/progress_funds";
 import ButtonAction from "@/app/ui/button/action";
 import {Categories} from "@/app/ui/category/category";
 import Separator from "@/app/ui/separator/separator";
-import {getFundraise} from "@/app/lib/actions";
-
-async function fetchClientInfo(id: string) : Promise<Person | undefined>  {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(people.find(client => client.id === id))
-        }, 700)
-    });
-}
+import {getFundraise} from "@/app/lib/actions/fundraise/get";
 
 export default function FundraiseInfo() {
-    const { id } = useParams();
-    const [fundraise, setFundraise] = useState<Person | null>(null);
+    const { id }: {id: string} = useParams();
+    const [fundraise, setFundraise] = useState<Fundraise | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -117,7 +108,16 @@ export default function FundraiseInfo() {
             </div>
 
             {/* Модальное окно */}
-            <PaymentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+            <PaymentModal
+                fundraiseID={id}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                accountID={fundraise.account_id}
+                onDonateSuccess={async () => {
+                    const { data } = await getFundraise(id)
+                    setFundraise(data)
+                }}
+            />
         </div>
     );
 }
