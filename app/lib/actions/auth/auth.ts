@@ -15,9 +15,6 @@ export interface IAuthData {
 
 export async function fetchAuth(props: IAuthData) {
     let { response , error, mustRefresh } = await makeAuthRequest(props)
-    console.log('response:', response)
-    console.log('error:', error)
-    console.log('mustRefresh:', mustRefresh)
     if (error) {
         return { error: error }
     }

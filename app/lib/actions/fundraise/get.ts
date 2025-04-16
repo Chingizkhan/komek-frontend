@@ -10,7 +10,6 @@ export async function getFundraise(clientID: string) {
             method: HTTP_GET
         })
         const data = await response.json()
-        console.log('data:', data)
         if (!response.ok) {
             return { error: new Error(data.error) }
         }

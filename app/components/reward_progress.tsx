@@ -67,12 +67,12 @@ export default function RewardsCard() {
                 {rewards.map((reward) => (
                     <Card key={reward.id} className="p-4 rounded-xl shadow-md relative flex items-center space-x-4">
                         <div className="relative w-16 h-16">
-                            <Image
-                                src={reward.image}
-                                alt={reward.title}
-                                layout="fill"
-                                className="rounded-full"
-                            />
+                            {/*<Image*/}
+                            {/*    src={reward.image}*/}
+                            {/*    alt={reward.title}*/}
+                            {/*    layout="fill"*/}
+                            {/*    className="rounded-full"*/}
+                            {/*/>*/}
                         </div>
                         <div className="flex-1">
                             <h3 className="text-lg font-medium">{reward.title}</h3>

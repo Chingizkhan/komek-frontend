@@ -5,7 +5,7 @@ import Link from "next/link";
 import {LINK_LOGIN} from "@/app/consts/links";
 import RewardProgress from "@/app/components/reward_progress";
 import {useUser} from "@/app/store/auth";
-import {formatPhoneInput, normalizePhoneNumber} from "@/app/utils/phone";
+import {formatPhoneInput} from "@/app/utils/phone";
 import AccountBalance from "@/app/ui/account_balance/account_balance";
 import Separator from "@/app/ui/separator/separator";
 
@@ -16,12 +16,12 @@ const rewards = [
         progress: 75,
         total: 300,
     },
-    {
-        title: "Видеоткрытка от Антона Лапенко",
-        image: "/images/reward2.jpg",
-        progress: 50,
-        total: 600,
-    },
+    // {
+    //     title: "Видеоткрытка от Антона Лапенко",
+    //     image: "/images/reward2.jpg",
+    //     progress: 50,
+    //     total: 600,
+    // },
 ];
 
 function Login() {
@@ -77,14 +77,11 @@ export default function RewardsPage() {
                 <p className="text-lg font-semibold">Топ 10 наград</p>
                 <div className="flex gap-4 overflow-x-auto mt-3 pb-2">
                     {[
-                        {title: "Приглашение на день рождения «ПОМОЩИ»", img: "/flag.jpg"},
-                        {title: "Тренировка на льду с Женей Медведевой", img: "/medvedeva.jpg"},
-                        {title: "День в Клубе LOOKING", img: "/looking.jpg"},
+                        {title: "Приглашение на день рождения «KOMEK»"},
+                        {title: "Тренировка на льду с Женей Медведевой"},
+                        {title: "День в Клубе LOOKING"},
                     ].map((item, index) => (
-                        <div key={index} className="w-40 min-w-[150px] rounded-lg overflow-hidden shadow">
-                            <Image src={item.img} alt={item.title} width={150} height={100}/>
-                            <p className="p-2 text-sm font-semibold">{item.title}</p>
-                        </div>
+                        <Reward key={index} title={item.title} />
                     ))}
                 </div>
             </div>
@@ -100,4 +97,30 @@ export default function RewardsPage() {
             </div>
         </div>
     );
+}
+
+const bgColors = [
+    "bg-pink-200/60",
+    "bg-purple-200/60",
+    "bg-blue-200/60",
+    "bg-green-200/60",
+    "bg-yellow-200/60",
+    "bg-orange-200/60",
+];
+
+function Reward({title}: { title: string }) {
+    const colorClass =
+        bgColors[Math.floor(Math.random() * bgColors.length)];
+
+    return (
+        <div
+            className={`w-[150px] h-[150px] min-w-[150px] rounded-2xl overflow-hidden shadow-md flex items-center justify-center text-center ${colorClass}`}
+        >
+            <p className="p-2 text-sm font-semibold text-gray-700">{title}</p>
+        </div>
+        // <div className="w-40 min-w-[150px] rounded-lg overflow-hidden shadow">
+        //     {/*<Image src={img} alt={title} width={150} height={100}/>*/}
+        //     <p className="p-2 text-sm font-semibold">{title}</p>
+        // </div>
+    )
 }

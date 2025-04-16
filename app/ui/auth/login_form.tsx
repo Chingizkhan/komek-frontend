@@ -5,12 +5,14 @@ import Link from "next/link";
 import React, {useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
 import {loginHandler} from "@/app/lib/actions/auth/login";
+import {useAuthStore} from "@/app/store/auth";
 
 
 export default function LoginForm() {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const [error, setError] = useState("");
+    const setUser = useAuthStore((state) => state.login);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,6 +21,7 @@ export default function LoginForm() {
             const result = await loginHandler(new FormData(e.target as HTMLFormElement));
 
             if (result.success) {
+                setUser(result.data)
                 router.back()
             } else {
                 setError(result.error.message || "Ошибка входа");
