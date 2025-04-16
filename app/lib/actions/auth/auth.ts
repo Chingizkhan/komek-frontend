@@ -14,11 +14,14 @@ export interface IAuthData {
 }
 
 export async function fetchAuth(props: IAuthData) {
-    let { response , error} = await makeAuthRequest(props)
+    let { response , error, mustRefresh } = await makeAuthRequest(props)
+    console.log('response:', response)
+    console.log('error:', error)
+    console.log('mustRefresh:', mustRefresh)
     if (error) {
         return { error: error }
     }
-    if (response.status === 401) {
+    if (mustRefresh) {
         await refreshTokens()
         response = await makeAuthRequest(props)
     }
@@ -40,7 +43,11 @@ async function makeAuthRequest({ url, method, notUseCache, body, headers }:IAuth
     const refreshToken = cookie.get(REFRESH_TOKEN)
 
     if (!accessToken?.value) {
-        return { error: 'access_token_is_empty' }
+        if (refreshToken?.value) {
+            return { mustRefresh: true }
+        } else {
+            return { error: 'empty_tokens', mustRefresh: false }
+        }
     }
 
     const req = {
@@ -58,6 +65,9 @@ async function makeAuthRequest({ url, method, notUseCache, body, headers }:IAuth
     }
 
     const response = await fetch(url, req)
+    if (response.status === 401) {
+        return { response, mustRefresh: true }
+    }
     return { response }
 }
 

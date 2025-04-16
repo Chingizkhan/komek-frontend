@@ -19,7 +19,7 @@ export default function LoginForm() {
             const result = await loginHandler(new FormData(e.target as HTMLFormElement));
 
             if (result.success) {
-                router.push("/");
+                router.back()
             } else {
                 setError(result.error.message || "Ошибка входа");
             }

@@ -21,7 +21,6 @@ export async function loginHandler(formData: FormData) {
             phone: formData.get('phone'),
             password: formData.get('password')
         })
-        // await new Promise((resolve) => setTimeout(resolve, 1500))
         const response = await fetch(AUTH_URL+'/login', {
             method: HTTP_POST,
             headers: createHeaders(),
@@ -32,6 +31,7 @@ export async function loginHandler(formData: FormData) {
         })
         const data = await response.json()
 
+        console.log('data:', data)
         if (!response.ok) {
             return { error: new Error(data.error) }
         }
@@ -46,6 +46,4 @@ export async function loginHandler(formData: FormData) {
         console.log('err:', e)
         return { error: e }
     }
-
-    // redirect('/')
 }
