@@ -2,6 +2,7 @@
 
 import {z} from "zod";
 import {normalizePhoneNumber} from "@/app/utils/phone";
+import {AUTH_URL} from "@/app/lib/actions/const/constants";
 
 const registerSchema = z.object({
     phone: z.string(),
@@ -17,7 +18,7 @@ export async function registerHandler(formData: FormData) {
             phone: formData.get('phone'),
             password: formData.get('password')
         })
-        const response = await fetch('http://localhost:8887/user/register', {
+        const response = await fetch(AUTH_URL+'/register', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -1,14 +1,19 @@
 'use server'
 
 import {cookies} from "next/headers";
+import {refreshTokens} from "@/app/lib/actions/auth/refresh_tokens";
+import {ACCESS_TOKEN, REFRESH_TOKEN} from "@/app/lib/actions/const/constants";
+import {createHeaders} from "@/app/lib/actions/util";
 
-export async function fetchAuth(props: {
+export interface IAuthData {
     url: string,
     method: string,
-    notUseCache: boolean,
-    body: any,
-    headers: any,
-}) {
+    notUseCache?: boolean,
+    body?: object,
+    headers?: object,
+}
+
+export async function fetchAuth(props: IAuthData) {
     let { response , error} = await makeAuthRequest(props)
     if (error) {
         return { error: error }
@@ -29,16 +34,10 @@ export async function fetchAuth(props: {
     }
 }
 
-async function makeAuthRequest({ url, method, notUseCache, body, headers }:{
-    url: string,
-    method: string,
-    notUseCache: boolean,
-    body: any,
-    headers: any,
-}) {
+async function makeAuthRequest({ url, method, notUseCache, body, headers }:IAuthData) {
     const cookie = await cookies()
-    const accessToken = cookie.get("Access-Token")
-    const refreshToken = cookie.get("Refresh-Token")
+    const accessToken = cookie.get(ACCESS_TOKEN)
+    const refreshToken = cookie.get(REFRESH_TOKEN)
 
     if (!accessToken?.value) {
         return { error: 'access_token_is_empty' }
@@ -46,14 +45,12 @@ async function makeAuthRequest({ url, method, notUseCache, body, headers }:{
 
     const req = {
         method: method,
-        headers: {
-            ...headers,
+        headers: createHeaders({
             'Authorization': 'Bearer ' +accessToken?.value,
             'Refresh-Token': refreshToken?.value,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: body,
+            ...headers
+        }),
+        body: JSON.stringify(body),
     }
 
     if (notUseCache) {
