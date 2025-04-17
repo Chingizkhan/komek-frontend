@@ -32,6 +32,7 @@ import {Account} from "@/app/domain/domain";
 // export default AccountBalance;
 
 const AccountBalance = ({ account }: { account: Account }) => {
+    if (!account) return <div></div>
     const { balance, currency } = account;
 
     const formattedBalance = new Intl.NumberFormat("en-US", {

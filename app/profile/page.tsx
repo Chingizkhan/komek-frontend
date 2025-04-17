@@ -37,9 +37,6 @@ function Login() {
                     <p className="text-gray-500 text-sm">Авторизуйся</p>
                 </div>
             </div>
-            <Link href={LINK_LOGIN} className="bg-black text-white px-4 py-2 rounded-lg">
-                Войти
-            </Link>
         </>
     )
 }
@@ -51,7 +48,10 @@ export default function RewardsPage() {
         <div className="min-h-screen bg-white text-black pb-16">
             {/* Верхний блок */}
             <div className="p-4">
-                <p className="text-lg font-bold">Награды</p>
+                <p className="text-lg font-bold mt-3">Аккаунт</p>
+                <div className="flex flex-col items-center justify-between mt-3">
+                    <AccountBalance account={user?.account}/>
+                </div>
 
                 {
                     user?.id ? (
