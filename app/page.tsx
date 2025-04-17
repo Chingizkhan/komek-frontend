@@ -1,17 +1,8 @@
 'use client'
-import Image from "next/image";
-import {removeHandler} from "@/app/lib/actions/actions";
 import {useState} from "react";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 import { motion } from "framer-motion";
 import {useAuthStore} from "@/app/store/auth";
-
-// <button
-//     onClick={removeHandler}
-//     className="bg-red-500 p-4 text-white"
-// >
-//   Delete account
-// </button>
 
 export default function Home() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -20,25 +11,6 @@ export default function Home() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-            {/* Шапка */}
-            <header className="bg-white shadow-md p-4 fixed w-full top-0 z-20">
-                <div className="max-w-6xl mx-auto flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-blue-600">Помощь рядом</h1>
-
-                    {/* Десктопное меню */}
-                    <nav className="hidden md:flex space-x-6">
-                        <a href="#" className="hover:text-blue-600 transition">Главная</a>
-                        <a href="#news" className="hover:text-blue-600 transition">Новости</a>
-                        <a href="#people" className="hover:text-blue-600 transition">Люди</a>
-                    </nav>
-
-                    {/* Гамбургер меню */}
-                    <button onClick={toggleMenu} className="md:hidden text-gray-700">
-                        <Menu size={28} />
-                    </button>
-                </div>
-            </header>
-
             {/* Мобильное меню */}
             {menuOpen && <div className="fixed inset-0 bg-black/40 z-30" onClick={toggleMenu}></div>}
             <motion.div

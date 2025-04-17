@@ -1,11 +1,11 @@
 'use client'
 
 import {useRouter} from "next/navigation";
-import {loginHandler, registerHandler} from "@/app/lib/actions/actions";
 import {LINK_LOGIN} from "@/app/consts/links";
 import Form from "@/app/ui/auth/form";
 import Link from "next/link";
 import React, {useState, useTransition} from "react";
+import {registerHandler} from "@/app/lib/actions/auth/register";
 
 export default function RegistrationForm() {
     const [isPending, startTransition] = useTransition();

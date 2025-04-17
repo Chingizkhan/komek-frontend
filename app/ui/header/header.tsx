@@ -55,7 +55,7 @@ const menuItems = [
     { label: "Профиль", icon: User, link: LINK_PROFILE },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({onClick}: {onClick: () => void}) => {
     return (
         <div className="w-[260px] h-screen bg-white border-r py-6 flex flex-col gap-6">
             {/*<div className="text-xl font-bold text-sky-500 px-2">💙 DonateHub</div>*/}
@@ -63,6 +63,7 @@ const Sidebar = () => {
             <nav className="flex flex-col">
                 {menuItems.map(({ label, icon: Icon, link }) => (
                     <Link
+                        onClick={onClick}
                         key={label}
                         className="flex items-center gap-4 text-base text-gray-800 font-medium hover:bg-gray-100 transition px-6 py-4 rounded-lg"
                         href={link}
@@ -126,7 +127,7 @@ const Header = () => {
                         {/*<Points />*/}
                     </div>
                 )}
-                <Sidebar />
+                <Sidebar onClick={toggleMenu} />
 
             </motion.div>
         </>
