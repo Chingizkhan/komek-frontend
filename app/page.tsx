@@ -1,36 +1,9 @@
-'use client'
-import {useState} from "react";
-import { X } from "lucide-react";
-import { motion } from "framer-motion";
-import {useAuthStore} from "@/app/store/auth";
-
 export default function Home() {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const toggleMenu = () => setMenuOpen(!menuOpen);
-    const { user } = useAuthStore()
-
     return (
         <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-            {/* Мобильное меню */}
-            {menuOpen && <div className="fixed inset-0 bg-black/40 z-30" onClick={toggleMenu}></div>}
-            <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: menuOpen ? 0 : "100%", transition: { duration: 0.3 } }}
-                className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-40 flex flex-col p-6"
-            >
-                <button onClick={toggleMenu} className="self-end text-gray-700">
-                    <X size={28} />
-                </button>
-                <p>{user?.name}</p>
-                <nav className="mt-8 flex flex-col space-y-4">
-                    <a href="#" className="text-lg font-medium hover:text-blue-600 transition">Главная</a>
-                    <a href="#news" className="text-lg font-medium hover:text-blue-600 transition">Новости</a>
-                    <a href="#people" className="text-lg font-medium hover:text-blue-600 transition">Люди</a>
-                </nav>
-            </motion.div>
-
             {/* Контент */}
-            <main className="flex-1 pt-20 max-w-6xl mx-auto p-6">
+            <main className="flex-1 pt-10 max-w-6xl mx-auto p-6">
+                <h2>Наша миссия</h2>
                 {/* Новости */}
                 <section id="news" className="mb-12">
                     <h2 className="text-3xl font-semibold text-blue-700 mb-6">Новости</h2>
