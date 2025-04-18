@@ -1,10 +1,9 @@
 'use client'
 
 import Link from "next/link";
-import {LINK_FUNDRAISES, LINK_LOGIN, LINK_MAIN, LINK_NEWS, LINK_PROFILE} from "@/app/consts/links"
+import {LINK_FUNDRAISES, LINK_MAIN, LINK_NEWS, LINK_PROFILE} from "@/app/consts/links"
 import Logo from "@/app/ui/logo/logo";
 import {useUser} from "@/app/store/auth";
-import {formatPhoneInput} from "@/app/utils/phone";
 import {useEffect, useState} from "react";
 import {motion} from "framer-motion";
 import {Menu, X} from "lucide-react";
@@ -14,6 +13,7 @@ import {
     Newspaper,
     User,
 } from "lucide-react";
+import UserButton from "@/app/ui/authorized_button/authorized_button";
 
 // const Header = () => {
 //     return (
@@ -109,24 +109,7 @@ const Header = () => {
                 <button onClick={toggleMenu} className="self-end text-gray-700 p-6">
                     <X size={28}/>
                 </button>
-                {user?.id ? (
-                    <div className="flex flex-col items-center justify-between">
-                        <div className="flex gap-8">
-                            {
-                                user.name ? (
-                                    <p className="text-xl text-blue-500">{user.name}</p>
-                                ) : (
-                                    <p className="text-xl text-blue-500">{formatPhoneInput(user.phone)}</p>
-                                )
-                            }
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex items-center justify-between">
-                        <Login/>
-                        {/*<Points />*/}
-                    </div>
-                )}
+                <UserButton onClick={toggleMenu} />
                 <Sidebar onClick={toggleMenu} />
 
             </motion.div>
@@ -134,14 +117,6 @@ const Header = () => {
     );
 };
 
-function Login() {
-    return (
-        <>
-            <Link href={LINK_LOGIN} className="bg-black text-white px-4 py-2 rounded-lg">
-                Войти
-            </Link>
-        </>
-    )
-}
+
 
 export default Header

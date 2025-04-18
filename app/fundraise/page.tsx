@@ -1,13 +1,14 @@
-import FundraiseList from "@/app/ui/fundraise/list";
-import {Suspense} from "react";
-import Loader from "@/app/ui/loader/loader";
+import FundraiseList from "@/app/ui/fundraise/list"
+import {Suspense} from "react"
+import FundraiseSkeletonList from "@/app/ui/fundraise/skeleton/list/skeleton_list";
 
 export default function Page() {
     return (
         <main>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<FundraiseSkeletonList />}>
                 <FundraiseList />
             </Suspense>
         </main>
     )
 }
+

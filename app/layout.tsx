@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import AuthProvider from "@/app/components/auth_provider";
-import Header from "@/app/ui/header/header";
-import Footer from "@/app/ui/footer/footer";
+import "./globals.css"
+import { inter } from '@/app/ui/fonts'
+import AuthProvider from "@/app/components/auth_provider"
+import Header from "@/app/ui/header/header"
+import Footer from "@/app/ui/footer/footer"
+import {SkeletonTheme} from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -30,12 +33,15 @@ export default function RootLayout({
     <html lang="en">
       <body
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${inter.className} antialiased\``}
       >
-        <AuthProvider>
-            <Header />
-            {children}
-            <Footer />
-        </AuthProvider>
+          <SkeletonTheme baseColor="#cfcfcf" highlightColor="#edebeb">
+            <AuthProvider>
+                <Header />
+                {children}
+                <Footer />
+            </AuthProvider>
+          </SkeletonTheme>
       </body>
     </html>
   );

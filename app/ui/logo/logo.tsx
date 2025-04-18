@@ -21,8 +21,8 @@ import Image from "next/image";
 //     </div>
 // )
 
-const Logo = () => (
-    <Image src={"/komek_logo.png" } width={70} height={40} alt={'logo'} />
+const Logo = ({ width = 70, height = 40 }) => (
+    <Image src={"/komek_logo.png" } width={width} height={height} alt={'logo'} />
 )
 
 export default Logo;
