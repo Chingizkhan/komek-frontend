@@ -28,16 +28,18 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import PaymentModal from "@/app/components/payment_modal";
-import {Fundraise} from "@/app/domain/domain";
-import {ProgressFunds} from "@/app/ui/progress/progress_funds";
-import ButtonAction from "@/app/ui/button/action";
-import {Categories} from "@/app/ui/category/category";
-import Separator from "@/app/ui/separator/separator";
-import {getFundraise} from "@/app/lib/actions/fundraise/get";
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import Image from "next/image"
+import PaymentModal from "@/app/components/payment_modal"
+import {Fundraise} from "@/app/domain/domain"
+import {ProgressFunds} from "@/app/ui/progress/progress_funds"
+import ButtonAction from "@/app/ui/button/action"
+import {Categories} from "@/app/ui/category/category"
+import Separator from "@/app/ui/separator/separator"
+import {getFundraise} from "@/app/lib/actions/fundraise/get"
+import FundraiseInfoSkeleton from "@/app/ui/fundraise/fundraise_info/skeleton/skeleton"
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function FundraiseInfo() {
     const { id }: {id: string} = useParams();
@@ -47,6 +49,11 @@ export default function FundraiseInfo() {
     useEffect(() => {
         async function fetchPerson() {
             const { data } = await getFundraise(id);
+            await new Promise((res) => {
+                setTimeout(() => {
+                    res(1)
+                }, 1000)
+            })
             const client = {
                 ...data,
             }
@@ -55,70 +62,78 @@ export default function FundraiseInfo() {
         fetchPerson();
     }, [id]);
 
-    if (!fundraise) return <p className="text-center mt-10 text-gray-500">Загрузка...</p>;
+    if (!fundraise) return <FundraiseInfoSkeleton />
 
     return (
-        <div className="max-w-md mx-auto md:max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden">
-            {/* Картинка */}
-            {/*<div className="relative w-full h-80">*/}
-            {/*    <Image*/}
-            {/*        src={person.image}*/}
-            {/*        alt={person.name}*/}
-            {/*        layout="fill"*/}
-            {/*        objectFit="cover"*/}
-            {/*        className="rounded-t-xl"*/}
-            {/*        unoptimized*/}
-            {/*    />*/}
-            {/*</div>*/}
-            <div className="relative">
-                <Image
-                    src={fundraise.image_url}
-                    alt={fundraise.name}
-                    width={600}
-                    height={400}
-                    // layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-xl w-full h-120 object-cover rounded-lg"
-                    unoptimized
-                />
-            </div>
+        <AnimatePresence mode="wait">
+            {!fundraise ? (
+                <motion.div
+                    key="skeleton"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <FundraiseInfoSkeleton />
+                </motion.div>
+            ) : (
+                <motion.div
+                    key="content"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="max-w-md mx-auto md:max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div className="relative">
+                            <Image
+                                src={fundraise.image_url}
+                                alt={fundraise.name}
+                                width={600}
+                                height={400}
+                                className="rounded-t-xl w-full h-120 object-cover rounded-lg"
+                                unoptimized
+                            />
+                        </div>
 
-            {/* Информация */}
-            <div className="p-6 relative -mt-6 bg-white rounded-t-3xl shadow-md">
-                <h1 className="text-2xl font-bold text-gray-900 text-center">{fundraise.name}</h1>
+                        <div className="p-6 relative -mt-6 bg-white rounded-t-3xl shadow-md">
+                            <h1 className="text-2xl font-bold text-gray-900 text-center">{fundraise.name}</h1>
 
-                <Categories categories={[...fundraise.categories, fundraise.city]}/>
+                            <Categories categories={[...fundraise.categories, fundraise.city]} />
 
-                <div className="flex items-center justify-center text-gray-600 text-sm mb-4">
-                    📍 {fundraise.city}
-                </div>
+                            <div className="flex items-center justify-center text-gray-600 text-sm mb-4">
+                                📍 {fundraise.city}
+                            </div>
 
-                {/* Прогресс сбора */}
-                <ProgressFunds from={fundraise.collected} to={fundraise.goal} title="Продуктовая корзина"/>
+                            <ProgressFunds from={fundraise.collected} to={fundraise.goal} title="Продуктовая корзина" />
 
-                {/* Количество людей, которые помогают */}
-                <Supporters quantity={fundraise.supporters_quantity}/>
-                <Separator fraction={0.5} />
-                <Description desc={fundraise.description} />
+                            <Supporters quantity={fundraise.supporters_quantity} />
+                            <Separator fraction={0.5} />
+                            <Description desc={fundraise.description} />
 
-                {/* Кнопка "Помочь" */}
-                <div className="mt-6">
-                    <ButtonAction text="Помочь" onClick={() => setIsModalOpen(true)} className="w-full py-3 text-lg"/>
-                </div>
-            </div>
+                            <div className="mt-6">
+                                <ButtonAction
+                                    text="Помочь"
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="w-full py-3 text-lg"
+                                />
+                            </div>
+                        </div>
 
-            {/* Модальное окно */}
-            <PaymentModal
-                fundraiseID={id}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                accountID={fundraise.account_id}
-                onDonateSuccess={async () => {
-                    const { data } = await getFundraise(id)
-                    setFundraise(data)
-                }}
-            />
-        </div>
+                        <PaymentModal
+                            fundraiseID={id}
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            accountID={fundraise.account_id}
+                            onDonateSuccess={async () => {
+                                const { data } = await getFundraise(id);
+                                setFundraise(data);
+                            }}
+                        />
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
