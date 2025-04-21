@@ -7,6 +7,7 @@ export const FUNDRAISE_URL = BASE_URL+'/fundraise'
 export const USER_URL = BASE_URL+'/user'
 export const AUTH_URL = BASE_URL+'/user'
 export const OPERATION_URL = BASE_URL+'/operation'
+export const ACCOUNT_URL = BASE_URL+'/account'
 
 export const HTTP_GET = 'GET'
 export const HTTP_POST = 'POST'

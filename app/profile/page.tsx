@@ -4,6 +4,7 @@ import RewardProgress from "@/app/components/reward_progress";
 import {useUser} from "@/app/store/auth";
 import AccountBalance from "@/app/ui/account_balance/account_balance";
 import UserButton from "@/app/ui/authorized_button/authorized_button";
+import TransactionList from "@/app/ui/profile/transaction_list/transaction_list";
 
 const rewards = [
     {
@@ -41,6 +42,7 @@ export default function RewardsPage() {
                             {/*</div>*/}
                             {/*<Separator fraction={1} />*/}
                             <AccountBalance account={user.account}/>
+                            <TransactionList accountID={user.account.id} />
                         </div>
                     ) : (
                         <UserButton onClick={() => {}} />
