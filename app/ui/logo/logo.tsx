@@ -21,8 +21,26 @@ import Image from "next/image";
 //     </div>
 // )
 
-const Logo = ({ width = 70, height = 40 }) => (
-    <Image src={"/komek_logo.png" } width={width} height={height} alt={'logo'} />
+const Logo = ({ width = 130, height = 80 }) => (
+    <Image
+        src={"/komek_logo_2.png" }
+        alt={'logo'}
+        width={width}
+        height={height}
+        // layout={'fill'}
+        // objectFit="cover"
+    />
+)
+
+export const LogoVertical = ({ width = 130, height = 80 }) => (
+    <Image
+        src={"/komek_logo.png" }
+        alt={'logo'}
+        width={width}
+        height={height}
+        // layout={'fill'}
+        // objectFit="cover"
+    />
 )
 
 export default Logo;

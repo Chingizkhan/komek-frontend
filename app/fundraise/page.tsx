@@ -1,4 +1,4 @@
-import FundraiseList from "@/app/ui/fundraise/list"
+import FundraiseList from "@/app/ui/fundraise/list/server_list"
 import {Suspense} from "react"
 import FundraiseSkeletonList from "@/app/ui/fundraise/skeleton/list/skeleton_list";
 

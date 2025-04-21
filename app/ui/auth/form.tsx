@@ -13,8 +13,8 @@ const Form = ({ title, btnText, addition, action, error, loading }: {title: stri
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
+        <div className="flex items-center justify-center bg-gray-100">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex items-center justify-center mb-4">
                     <Logo />
                 </div>

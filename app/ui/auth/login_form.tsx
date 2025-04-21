@@ -21,7 +21,7 @@ export default function LoginForm() {
             const result = await loginHandler(new FormData(e.target as HTMLFormElement));
 
             if (result.success) {
-                setUser(result.data)
+                setUser(result.data.user)
                 router.back()
             } else {
                 setError(result.error.message || "Ошибка входа");

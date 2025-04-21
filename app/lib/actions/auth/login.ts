@@ -31,7 +31,6 @@ export async function loginHandler(formData: FormData) {
         })
         const data = await response.json()
 
-        console.log('data:', data)
         if (!response.ok) {
             return { error: new Error(data.error) }
         }

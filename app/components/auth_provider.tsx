@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {useAuthStore} from "@/app/store/auth";
 import {getUser} from "@/app/lib/actions/user/get";
 import { motion, AnimatePresence } from "framer-motion";
-import Logo from "@/app/ui/logo/logo";
+import {LogoVertical} from "@/app/ui/logo/logo";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const setUser = useAuthStore((state) => state.login);
@@ -44,11 +44,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                             transition={{ duration: 0.6 }}
                             className="text-white text-4xl font-semibold tracking-wide flex items-center flex-col"
                         >
-                            <Logo width={150} />
+                            <LogoVertical width={150} />
                             {/*komek*/}
 
                             {/* Спиннер */}
-                            <div className="w-40 h-40 border-4 border-white border-t-transparent rounded-full animate-spin fixed" />
+                            <div className="w-40 h-40 border-4 border-purple-500 border-t-transparent rounded-full animate-spin fixed" />
                         </motion.div>
                     </motion.div>
                 )}
